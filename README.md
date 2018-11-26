@@ -1,2 +1,3 @@
-# gen-webpack
-Webpack template generator
+# gen-project
+
+JavaScript project template generator
