@@ -1,27 +1,38 @@
-const Mustache = require('mustache');
-const { fs } = require('fantasy-utility');
+const fs = require('fs');
 const path = require('path');
+const inquirer = require('inquirer');
+const config = require('./config');
 
-const config = {
-  extraConfig: `{}`,
-  package: {
-    name: 'hello'
+function genPackage(options = {}) {
+  if (options.name) config.pkgConfig.name = options.name;
+
+  return config.pkgConfig;
+}
+
+function genWebpack(options = {}) {
+  return config.webpackConfig;
+}
+
+async function applyPlugins() {
+  const pluginPath = path.join(__dirname, '../plugin');
+
+  const files = fs.readdirSync(pluginPath);
+  files.sort((a, b) => (a > b ? 1 : -1));
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const plugin = require(path.join(pluginPath, file));
+
+    if (typeof plugin.install === 'function') {
+      await plugin.install(config);
+    } else {
+      console.warn('plugin', file, 'no install function');
+    }
   }
-};
-
-async function genPackage(name) {
-  const view = {
-    name
-  };
-
-  const files = await fs.readFiles(
-    path.join(__dirname, '..', 'template', 'package.json')
-  );
-
-  const file = files[0];
-  return Mustache.render(file.content, view);
 }
 
 module.exports = {
-  genPackage
+  applyPlugins,
+  genPackage,
+  genWebpack
 };

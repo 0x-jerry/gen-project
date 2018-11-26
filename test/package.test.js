@@ -2,11 +2,10 @@ const { expect } = require('chai');
 const { genPackage } = require('../src/core');
 
 describe('package test', () => {
-  it('should be eq', async () => {
+  it('name should eq test', () => {
     const name = 'test';
-    const template = await genPackage(name);
+    const pkgConfig = genPackage({ name });
 
-    const pkg = JSON.parse(template);
-    expect(pkg.name).to.be.eq(name);
+    expect(pkgConfig.name).to.be.eq(name);
   });
 });
