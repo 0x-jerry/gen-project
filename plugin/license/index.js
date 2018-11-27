@@ -9,11 +9,12 @@ const _config = {
   name: 'license-plugin',
   options: {
     type: 'MIT',
-    name: 'null'
+    name: 'null',
+    year: new Date().getFullYear()
   }
 };
 
-function applyConfig(config, options) {
+function applyOptions(config, options) {
   _config.options = Object.assign(_config.options, options);
 
   config.pkgConfig.license = _config.options.type;
@@ -50,7 +51,7 @@ function install(config) {
   ];
 
   inquirer.prompt(licensePrompt).then(answers => {
-    applyConfig(config, {
+    applyOptions(config, {
       type: answers.license,
       name: answers.name
     });
@@ -59,5 +60,5 @@ function install(config) {
 
 module.exports = {
   install,
-  applyConfig
+  applyOptions
 };
