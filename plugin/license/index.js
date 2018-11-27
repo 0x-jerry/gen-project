@@ -19,9 +19,12 @@ function applyConfig(config, options) {
   config.pkgConfig.license = _config.options.type;
   config.plugins.push(_config);
 
-  const content = fs.readFileSync(path.join(__dirname, 'template', options.type), {
-    encoding: 'utf-8'
-  });
+  const content = fs.readFileSync(
+    path.join(__dirname, 'template', options.type),
+    {
+      encoding: 'utf-8'
+    }
+  );
 
   config.extraFiles.push({
     path: 'LICENSE',
@@ -32,16 +35,24 @@ function applyConfig(config, options) {
 }
 
 function install(config) {
-  const licensePrompt = {
-    type: 'list',
-    name: 'license',
-    message: 'Choose a license',
-    choices: licenses
-  };
+  const licensePrompt = [
+    {
+      type: 'list',
+      name: 'license',
+      message: 'Choose a license',
+      choices: licenses
+    },
+    {
+      type: 'input',
+      name: 'name',
+      message: 'Input your name'
+    }
+  ];
 
   inquirer.prompt(licensePrompt).then(answers => {
     applyConfig(config, {
-      type: answers.license
+      type: answers.license,
+      name: answers.name
     });
   });
 }
