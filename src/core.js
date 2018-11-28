@@ -37,10 +37,10 @@ function render(filePath) {
 
 async function applyPlugins() {
   const pluginPath = path.join(__dirname, '..', 'plugin');
-  const files = fs.readdirSync(pluginPath);
+  const plugins = fs.readdirSync(pluginPath);
 
-  for (let i = 0; i < files.length; i++) {
-    const plugin = require(path.join(pluginPath, files[i]));
+  for (let i = 0; i < plugins.length; i++) {
+    const plugin = require(path.join(pluginPath, plugins[i]));
     await plugin.install(pluginHelper);
   }
 }
@@ -61,7 +61,7 @@ async function genProject(prefixPath = '../temp') {
     const tpl = templates[i].tpl;
     const p = templates[i].path;
     const content = await render(tpl);
-    //save files
+    //save file
     await utils.fs.saveFile(path.join(__dirname, prefixPath, p), content);
   }
 }
