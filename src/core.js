@@ -8,6 +8,17 @@ const utils = require('./utils');
 config.author = utils.gitConfig();
 config.project = path.parse(process.cwd()).name;
 
+const pluginHelper = {
+  config,
+  addPlugin(name, options) {
+    if (config.plugins[name]) {
+      return console.warn('duplicate plugin', name);
+    }
+
+    config.plugins[name] = options;
+  }
+};
+
 function render(filePath) {
   const p = path.isAbsolute(filePath)
     ? filePath
@@ -30,7 +41,7 @@ async function applyPlugins() {
 
   for (let i = 0; i < files.length; i++) {
     const plugin = require(path.join(pluginPath, files[i]));
-    await plugin.install(config);
+    await plugin.install(pluginHelper);
   }
 }
 
@@ -58,6 +69,7 @@ async function genProject(prefixPath = '../temp') {
 async function test() {
   await applyPlugins();
   await genProject();
+
   console.log(JSON.stringify(config, null, 2));
 }
 

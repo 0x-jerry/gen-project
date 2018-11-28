@@ -11,20 +11,22 @@ const _config = {
   templates: []
 };
 
-function applyOptions(config, { type, name }) {
+function applyOptions(helper, { type, name }) {
   _config.type = type;
-  _config.author = name || config.author.name;
+  _config.author = name;
   _config.templates.push({
     path: 'LICENSE',
     tpl: path.join(__dirname, 'template', type)
   });
 
-  config.plugins[_name] = _config;
+  helper.addPlugin(_name, _config);
 
   return _config;
 }
 
-async function install(config) {
+async function install(helper) {
+  const config = helper.config;
+
   const licensePrompt = [
     {
       type: 'list',
@@ -35,14 +37,14 @@ async function install(config) {
     {
       type: 'input',
       name: 'name',
-      // default: 'Fantasy',
-      message: 'Input your name'
+      default: config.author && config.author.name,
+      message: 'Input license owner'
     }
   ];
 
   const answers = await inquirer.prompt(licensePrompt);
 
-  applyOptions(config, {
+  applyOptions(helper, {
     type: answers.license,
     name: answers.name
   });
