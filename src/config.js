@@ -1,48 +1,45 @@
-const pkgConfig = {
-  name: '',
-  version: '0.1.0',
-  script: {},
-  dependencies: {},
-  devDependencies: {}
-};
-
-const webpackConfig = {
-  entry: '',
-  mode: 'development',
-  output: {},
-  module: {
-    rules: {}
-  },
-  resolve: {},
-  plugins: [], // ['new Plugin()'] => plugins: [ new plugin()]
-  devtools: '',
-  devServer: {}
-};
-
 const config = {
-  pkgConfig,
-  webpackConfig,
-  extraFiles: [
-    // {
-    //   path: '.eslintrc',
-    //   content: ''
-    // }
-  ],
-  preset: {
-    target: 'lib | browser | node',
-    language: 'js | ts'
+  project: '',
+  author: {
+    name: '',
+    email: ''
   },
-  // eslint: true,
-  // editorConfig: true,
-  // test: {
-  //   mocha: true
-  // },
-  // license: 'MIT',
-  plugins: [
-    // { // sort with name
-    //   name: 'plugin-name',
-    //   options: {}
-    // }
+  packages: {
+    depend: [],
+    dev: ['webpack', 'webpack-cli']
+  },
+  js: true,
+  ts: false,
+  browser: true,
+  node: false,
+  isModule: false,
+  plugins: {
+    'editor-config': {
+      templates: [
+        {
+          path: '.editorconfig',
+          tpl: 'template/.editorconfig'
+        }
+      ]
+    }
+  },
+  templates: [
+    {
+      path: 'package.json',
+      tpl: 'template/package.json'
+    },
+    {
+      path: 'webpack.base.js',
+      tpl: 'template/webpack.base.js'
+    },
+    {
+      path: 'webpack.dev.js',
+      tpl: 'template/webpack.dev.js'
+    },
+    {
+      path: 'webpack.prod.js',
+      tpl: 'template/webpack.prod.js'
+    }
   ]
 };
 

@@ -1,0 +1,11 @@
+{
+  "name": "{{project}}",
+  {{#author}}
+  "author": "{{name}} <{{email}}>",
+  {{/author}}
+  "version": "1.0.0",
+  "main": "index.js",
+  {{#plugins.license}}
+  "license": "{{type}}"
+  {{/plugins.license}}
+}

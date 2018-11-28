@@ -1,41 +1,30 @@
 const inquirer = require('inquirer');
-const fs = require('fs');
 const path = require('path');
-const Mustache = require('mustache');
 
 const licenses = ['MIT'];
 
+const _name = 'license';
+
 const _config = {
-  name: 'license-plugin',
-  options: {
-    type: 'MIT',
-    name: 'null',
-    year: new Date().getFullYear()
-  }
+  type: 'MIT',
+  year: new Date().getFullYear(),
+  templates: []
 };
 
-function applyOptions(config, options) {
-  _config.options = Object.assign(_config.options, options);
-
-  config.pkgConfig.license = _config.options.type;
-  config.plugins.push(_config);
-
-  const content = fs.readFileSync(
-    path.join(__dirname, 'template', options.type),
-    {
-      encoding: 'utf-8'
-    }
-  );
-
-  config.extraFiles.push({
+function applyOptions(config, { type, name }) {
+  _config.type = type;
+  _config.author = name || config.author.name;
+  _config.templates.push({
     path: 'LICENSE',
-    content: Mustache.render(content, _config.options)
+    tpl: path.join(__dirname, 'template', type)
   });
+
+  config.plugins[_name] = _config;
 
   return _config;
 }
 
-function install(config) {
+async function install(config) {
   const licensePrompt = [
     {
       type: 'list',
@@ -46,15 +35,16 @@ function install(config) {
     {
       type: 'input',
       name: 'name',
+      // default: 'Fantasy',
       message: 'Input your name'
     }
   ];
 
-  inquirer.prompt(licensePrompt).then(answers => {
-    applyOptions(config, {
-      type: answers.license,
-      name: answers.name
-    });
+  const answers = await inquirer.prompt(licensePrompt);
+
+  applyOptions(config, {
+    type: answers.license,
+    name: answers.name
   });
 }
 
