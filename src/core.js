@@ -8,6 +8,8 @@ const utils = require('./utils');
 config.author = utils.gitConfig();
 config.project = path.parse(process.cwd()).name;
 
+const pluginPath = path.join(__dirname, '..', 'plugin');
+
 const pluginHelper = {
   config,
   addPlugin(name, options) {
@@ -35,13 +37,14 @@ function render(filePath) {
   });
 }
 
-async function applyPlugins() {
-  const pluginPath = path.join(__dirname, '..', 'plugin');
-  const plugins = fs.readdirSync(pluginPath);
-
+async function applyPlugins(plugins) {
   for (let i = 0; i < plugins.length; i++) {
-    const plugin = require(path.join(pluginPath, plugins[i]));
-    await plugin.install(pluginHelper);
+    const p = path.join(pluginPath, plugins[i]);
+
+    if (fs.existsSync(p)) {
+      const plugin = require(p);
+      await plugin.install(pluginHelper);
+    }
   }
 }
 
@@ -49,8 +52,22 @@ async function genProject(prefixPath = '../temp') {
   // core template
   let templates = [].concat(config.templates);
 
+  // choose plugins
+  const answer = await inquirer.prompt([
+    {
+      name: 'plugins',
+      type: 'checkbox',
+      message: 'Select plugins',
+      choices: fs.readdirSync(pluginPath).concat(Object.keys(config.plugins))
+    }
+  ]);
+
+  const plugins = answer.plugins || [];
+
+  await applyPlugins(plugins);
+
   // plugin template
-  Object.keys(config.plugins).forEach(key => {
+  plugins.forEach(key => {
     const tpls = config.plugins[key].templates;
     if (tpls && Array.isArray(tpls)) {
       templates = templates.concat(tpls);
@@ -67,7 +84,10 @@ async function genProject(prefixPath = '../temp') {
 }
 
 async function test() {
-  await applyPlugins();
+  const tempPath = path.join(__dirname, '../temp');
+  require('child_process').execSync(`rm -rf ${tempPath}`, {
+    encoding: 'utf-8'
+  });
   await genProject();
 
   console.log(JSON.stringify(config, null, 2));
