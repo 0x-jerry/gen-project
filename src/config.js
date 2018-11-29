@@ -6,13 +6,20 @@ const config = {
   },
   packages: {
     dependencies: [],
-    devDependencies: ['webpack', 'webpack-cli']
+    devDependencies: [
+      'clean-webpack-plugin',
+      'copy-webpack-plugin',
+      'html-webpack-plugin',
+      'webpack',
+      'webpack-cli',
+      'webpack-merge',
+    ]
   },
-  js: true,
-  ts: false,
+  js: false,
+  ts: true,
   browser: true,
   node: false,
-  isModule: false,
+  library: false,
   plugins: {},
   templates: [
     {
