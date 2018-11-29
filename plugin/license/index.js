@@ -3,7 +3,7 @@ const path = require('path');
 
 const licenses = ['MIT'];
 
-const _name = 'license';
+const _name = path.basename(__dirname);
 
 const _config = {
   type: 'MIT',

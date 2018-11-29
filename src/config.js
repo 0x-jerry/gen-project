@@ -13,32 +13,23 @@ const config = {
   browser: true,
   node: false,
   isModule: false,
-  plugins: {
-    'editor-config': {
-      templates: [
-        {
-          path: '.editorconfig',
-          tpl: 'template/.editorconfig'
-        }
-      ]
-    }
-  },
+  plugins: {},
   templates: [
     {
       path: 'package.json',
-      tpl: 'template/package.json'
+      tpl: 'src/template/package.json'
     },
     {
       path: 'webpack.base.js',
-      tpl: 'template/webpack.base.js'
+      tpl: 'src/template/webpack.base.js'
     },
     {
       path: 'webpack.dev.js',
-      tpl: 'template/webpack.dev.js'
+      tpl: 'src/template/webpack.dev.js'
     },
     {
       path: 'webpack.prod.js',
-      tpl: 'template/webpack.prod.js'
+      tpl: 'src/template/webpack.prod.js'
     }
   ]
 };
