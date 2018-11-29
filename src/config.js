@@ -5,8 +5,8 @@ const config = {
     email: ''
   },
   packages: {
-    depend: [],
-    dev: ['webpack', 'webpack-cli']
+    dependencies: [],
+    devDependencies: ['webpack', 'webpack-cli']
   },
   js: true,
   ts: false,
