@@ -16,13 +16,22 @@ module.exports = {
     rules: [
       {{#ts}}
       {
-        test: /\.[tj]s?$/,
+        test: /\.[tj]s$/,
         exclude: [
           path.join(__dirname, 'node_modules')
         ],
         loader: 'ts-loader',
       },
       {{/ts}}
+      {{#js}}
+      {
+        test: /\.m?js$/,
+        exclude: [
+          path.join(__dirname, 'node_modules')
+        ],
+        loader: 'babel-loader',
+      },
+      {{/js}}
     ],
   },
   resolve: {

@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "node ./src/core.js"
+  },
   "dependencies": {
     "fantasy-utility": "^0.1.0",
-    "mustache": "^3.0.1"
+    "mustache": "^3.0.1",
+    "shelljs": "^0.8.3"
   },
   "devDependencies": {
+    "@types/shelljs": "^0.8.1",
     "chai": "^4.2.0",
     "inquirer": "^6.2.0",
     "lodash": "^4.17.11",

@@ -1,11 +1,15 @@
 {
   "name": "{{project}}",
+  "version": "1.0.0",
   {{#author}}
   "author": "{{name}} <{{email}}>",
   {{/author}}
-  "version": "1.0.0",
-  "main": "index.js",
+  "script": {
+    "dev": "set NODE_ENV=development&& webpack-dev-server --config ./webpack.dev.js",
+    "release": "set NODE_ENV=production&& webpack --config ./webpack.prod.js",
+  },
   {{#plugins.license}}
-  "license": "{{type}}"
+  "license": "{{type}}",
   {{/plugins.license}}
+  "main": "index.js"
 }

@@ -12,7 +12,8 @@ const config = {
       'html-webpack-plugin',
       'webpack',
       'webpack-cli',
-      'webpack-merge',
+      'webpack-dev-server',
+      'webpack-merge'
     ]
   },
   js: false,
@@ -37,6 +38,10 @@ const config = {
     {
       path: 'webpack.prod.js',
       tpl: 'src/template/webpack.prod.js'
+    },
+    {
+      path: 'static/index.html',
+      tpl: 'src/template/static/index.html'
     }
   ]
 };

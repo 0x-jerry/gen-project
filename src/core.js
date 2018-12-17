@@ -4,6 +4,8 @@ const inquirer = require('inquirer');
 const config = require('./config');
 const Mustache = require('mustache');
 const utils = require('./utils');
+const shell = require('shelljs');
+const { getConfigByLanguage } = require('./languageConfig');
 
 config.author = utils.gitConfig();
 config.project = path.parse(process.cwd()).name;
@@ -49,11 +51,14 @@ async function applyPlugins(plugins) {
 }
 
 async function genProject(prefixPath = '../temp') {
-  // core template
-  let templates = [].concat(config.templates);
-
   // choose plugins
   const answer = await inquirer.prompt([
+    {
+      name: 'useTs',
+      type: 'confirm',
+      message: 'Use typescript?',
+      default: false
+    },
     {
       name: 'plugins',
       type: 'checkbox',
@@ -62,8 +67,19 @@ async function genProject(prefixPath = '../temp') {
     }
   ]);
 
-  const plugins = answer.plugins || [];
+  const langConfig = getConfigByLanguage(answer.useTs ? 'ts' : 'js');
 
+  // core template
+  let templates = [].concat(config.templates).concat(langConfig.templates);
+  config.packages.dependencies = config.packages.dependencies.concat(
+    langConfig.packages.dependencies
+  );
+
+  config.packages.devDependencies = config.packages.devDependencies.concat(
+    langConfig.packages.devDependencies
+  );
+
+  const plugins = answer.plugins || [];
   await applyPlugins(plugins);
 
   // plugin template
@@ -85,10 +101,19 @@ async function genProject(prefixPath = '../temp') {
 
 async function test() {
   const tempPath = path.join(__dirname, '../temp');
-  require('child_process').execSync(`rm -rf ${tempPath}`, {
-    encoding: 'utf-8'
-  });
+  shell.exec(`rm -rf ${tempPath}`);
+
   await genProject();
+
+  // const packages = config.packages.dependencies;
+  // if (packages.length) {
+  //   shell.exec(`cd ${tempPath} && yarn add ${packages.join(' ')}`);
+  // }
+
+  // const devPackages = config.packages.devDependencies;
+  // if (devPackages.length) {
+  //   shell.exec(`cd ${tempPath} && yarn add ${devPackages.join(' ')} -D`);
+  // }
 
   console.log(JSON.stringify(config, null, 2));
 }
