@@ -136,4 +136,6 @@ async function test() {
   console.log(JSON.stringify(config, null, 2));
 }
 
-test();
+// test();
+
+module.exports = genProject;

@@ -1,7 +1,7 @@
 {
   "name": "logic-less-test",
   "version": "1.0.0",
-  "main": "index.js",
+  "bin": "bin.js",
   "license": "MIT",
   "scripts": {
     "dev": "node ./src/core.js"
