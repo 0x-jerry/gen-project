@@ -39,7 +39,7 @@ function render(filePath) {
   });
 }
 
-async function applyPlugins(plugins) {
+async function installPlugins(plugins) {
   for (let i = 0; i < plugins.length; i++) {
     const p = path.join(pluginPath, plugins[i]);
 
@@ -50,9 +50,11 @@ async function applyPlugins(plugins) {
   }
 }
 
-async function genProject(prefixPath = '../temp') {
-  // choose plugins
-  const answer = await inquirer.prompt([
+/**
+ * @returns {{useTs: boolean, plugins: string[]}}
+ */
+async function prompts() {
+  return await inquirer.prompt([
     {
       name: 'useTs',
       type: 'confirm',
@@ -66,11 +68,15 @@ async function genProject(prefixPath = '../temp') {
       choices: fs.readdirSync(pluginPath).concat(Object.keys(config.plugins))
     }
   ]);
+}
 
-  const langConfig = getConfigByLanguage(answer.useTs ? 'ts' : 'js');
+/**
+ *
+ * @param {'ts'|'js'} lang
+ */
+function applyLanguageConfig(lang) {
+  const langConfig = getConfigByLanguage(lang);
 
-  // core template
-  let templates = [].concat(config.templates).concat(langConfig.templates);
   config.packages.dependencies = config.packages.dependencies.concat(
     langConfig.packages.dependencies
   );
@@ -79,8 +85,20 @@ async function genProject(prefixPath = '../temp') {
     langConfig.packages.devDependencies
   );
 
+  return langConfig.templates;
+}
+
+async function genProject(prefixPath = '../temp') {
+  // choose plugins
+  const answer = await prompts();
+
+  // core template
+  let templates = []
+    .concat(config.templates)
+    .concat(applyLanguageConfig(answer.useTs ? 'ts' : 'js'));
+
   const plugins = answer.plugins || [];
-  await applyPlugins(plugins);
+  await installPlugins(plugins);
 
   // plugin template
   plugins.forEach(key => {
