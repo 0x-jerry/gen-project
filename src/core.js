@@ -20,7 +20,7 @@ const pluginHelper = {
     }
 
     config.plugins[name] = options;
-  }
+  },
 };
 
 function render(filePath) {
@@ -59,14 +59,14 @@ async function prompts() {
       name: 'useTs',
       type: 'confirm',
       message: 'Use typescript?',
-      default: false
+      default: false,
     },
     {
       name: 'plugins',
       type: 'checkbox',
       message: 'Select plugins',
-      choices: fs.readdirSync(pluginPath).concat(Object.keys(config.plugins))
-    }
+      choices: fs.readdirSync(pluginPath).concat(Object.keys(config.plugins)),
+    },
   ]);
 }
 
@@ -78,17 +78,21 @@ function applyLanguageConfig(lang) {
   const langConfig = getConfigByLanguage(lang);
 
   config.packages.dependencies = config.packages.dependencies.concat(
-    langConfig.packages.dependencies
+    langConfig.packages.dependencies,
   );
 
   config.packages.devDependencies = config.packages.devDependencies.concat(
-    langConfig.packages.devDependencies
+    langConfig.packages.devDependencies,
   );
 
   return langConfig.templates;
 }
 
-async function genProject(prefixPath = '../temp') {
+async function genProject(projectPath) {
+  if (!projectPath) {
+    return console.warn('incorrect path:', projectPath);
+  }
+
   // choose plugins
   const answer = await prompts();
 
@@ -113,7 +117,7 @@ async function genProject(prefixPath = '../temp') {
     const p = templates[i].path;
     const content = await render(tpl);
     //save file
-    await utils.fs.saveFile(path.join(__dirname, prefixPath, p), content);
+    await utils.fs.saveFile(path.join(projectPath, p), content);
   }
 }
 
@@ -121,7 +125,7 @@ async function test() {
   const tempPath = path.join(__dirname, '../temp');
   shell.exec(`rm -rf ${tempPath}`);
 
-  await genProject();
+  await genProject(tempPath);
 
   // const packages = config.packages.dependencies;
   // if (packages.length) {

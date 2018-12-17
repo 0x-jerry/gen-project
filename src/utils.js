@@ -12,7 +12,7 @@ function gitConfig() {
   try {
     config = {
       name: exec('git config user.name'),
-      email: exec('git config user.email')
+      email: exec('git config user.email'),
     };
   } catch (error) {}
 
@@ -21,5 +21,5 @@ function gitConfig() {
 
 module.exports = {
   gitConfig,
-  fs
+  fs,
 };

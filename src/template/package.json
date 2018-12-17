@@ -4,9 +4,9 @@
   {{#author}}
   "author": "{{name}} <{{email}}>",
   {{/author}}
-  "script": {
+  "scripts": {
     "dev": "set NODE_ENV=development&& webpack-dev-server --config ./webpack.dev.js",
-    "release": "set NODE_ENV=production&& webpack --config ./webpack.prod.js",
+    "release": "set NODE_ENV=production&& webpack --config ./webpack.prod.js"
   },
   {{#plugins.license}}
   "license": "{{type}}",
