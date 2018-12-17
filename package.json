@@ -4,7 +4,8 @@
   "bin": "bin.js",
   "license": "MIT",
   "scripts": {
-    "dev": "node ./src/core.js"
+    "dev": "node ./bin.js temp --skip-install-package",
+    "test": "node ./bin.js"
   },
   "dependencies": {
     "fantasy-utility": "^0.1.0",
