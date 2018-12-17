@@ -59,6 +59,8 @@ async function start() {
     if (devPackages.length) {
       shell.exec(`cd ${projectPath} && yarn add ${devPackages.join(' ')} -D`);
     }
+  } else {
+    console.log(JSON.stringify(config, null, 2));
   }
 }
 
