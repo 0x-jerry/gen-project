@@ -1,8 +1,9 @@
 {
-  "name": "logic-less-test",
+  "name": "gen-project",
   "version": "1.0.0",
   "bin": "bin.js",
   "license": "MIT",
+  "author": "cwxyz007 <jie844067636@gmail.com>",
   "scripts": {
     "dev": "node ./bin.js temp --skip-install-package",
     "test": "node ./bin.js"

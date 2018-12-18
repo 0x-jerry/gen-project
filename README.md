@@ -1,3 +1,3 @@
 # gen-project
 
-JavaScript project template generator
+JavaScript/TypeScript project template generator
