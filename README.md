@@ -11,7 +11,13 @@ JS/TS 项目模板生成工具 (JavaScript/TypeScript project template generator
 - [x] [core] babel / ts
 - [x] [core] eslint / tslint
 - [x] [core] webpack
+- [ ] [core] browser
+- [ ] [core] node
+- [ ] [core] library
 - [x] [plugin] editor-config
 - [x] [plugin] license
+- [ ] [plugin] css-preprocessor
+  - [ ] less
+  - [ ] post-css
 - [ ] [plugin] travis-ci
 - [ ] [plugin] coveralls
