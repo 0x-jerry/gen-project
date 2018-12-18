@@ -27,6 +27,10 @@ const config = {
   plugins: {},
   templates: [
     {
+      path: '.gitignore',
+      tpl: 'src/template/.gitignore',
+    },
+    {
       path: 'package.json',
       tpl: 'src/template/package.json',
     },
