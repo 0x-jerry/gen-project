@@ -2,20 +2,37 @@ const execSync = require('child_process').execSync;
 const utils = require('fantasy-utility');
 const fs = require('fs');
 
-function exec(command) {
-  return execSync(command, { encoding: 'utf-8' })
-    .toString()
-    .trim(/\s/);
+/**
+ *
+ * @param {string} command
+ * @param {import('child_process').ExecSyncOptionsWithBufferEncoding} configs
+ */
+function exec(command, configs) {
+  return execSync(
+    command,
+    Object.assign(
+      {
+        encoding: 'utf-8',
+      },
+      configs,
+    ),
+  );
 }
 
 function gitConfig() {
   let config = null;
   try {
     config = {
-      name: exec('git config user.name'),
-      email: exec('git config user.email'),
+      name: exec('git config user.name')
+        .toString()
+        .trim(/\s/),
+      email: exec('git config user.email')
+        .toString()
+        .trim(/\s/),
     };
-  } catch (error) {}
+  } catch (error) {
+    console.error('Get git config error:', error);
+  }
 
   return config;
 }
@@ -29,6 +46,7 @@ function isEmptyDir(path) {
 }
 
 module.exports = {
+  exec,
   isEmptyDir,
   gitConfig,
   ufs: utils.fs,

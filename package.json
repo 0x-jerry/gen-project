@@ -1,6 +1,6 @@
 {
   "name": "gen-project",
-  "version": "1.0.0",
+  "version": "0.0.1-0",
   "bin": "bin.js",
   "license": "MIT",
   "author": "cwxyz007 <jie844067636@gmail.com>",
@@ -10,14 +10,12 @@
   },
   "dependencies": {
     "fantasy-utility": "^0.1.0",
-    "mustache": "^3.0.1",
-    "shelljs": "^0.8.3"
+    "inquirer": "^6.2.0",
+    "mustache": "^3.0.1"
   },
   "devDependencies": {
-    "@types/shelljs": "^0.8.1",
     "chai": "^4.2.0",
     "eslint": "^5.10.0",
-    "inquirer": "^6.2.0",
     "lodash": "^4.17.11",
     "mocha": "^5.2.0"
   }

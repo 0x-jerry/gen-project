@@ -1,5 +1,5 @@
 const genProject = require('./src/core');
-const shell = require('shelljs');
+const utils = require('./src/utils');
 const inquirer = require('inquirer');
 const config = require('./src/config');
 const path = require('path');
@@ -53,11 +53,15 @@ async function start() {
   if (!binConfig.skipInstallPkg) {
     const packages = config.packages.dependencies;
     if (packages.length) {
-      shell.exec(`cd ${projectPath} && yarn add ${packages.join(' ')}`);
+      utils.exec(`cd ${projectPath} && yarn add ${packages.join(' ')}`, {
+        stdio: 'inherit',
+      });
     }
     const devPackages = config.packages.devDependencies;
     if (devPackages.length) {
-      shell.exec(`cd ${projectPath} && yarn add ${devPackages.join(' ')} -D`);
+      utils.exec(`cd ${projectPath} && yarn add ${devPackages.join(' ')} -D`, {
+        stdio: 'inherit',
+      });
     }
   } else {
     console.log(JSON.stringify(config, null, 2));
