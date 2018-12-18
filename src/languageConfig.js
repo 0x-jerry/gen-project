@@ -1,49 +1,50 @@
 const config = require('./config');
 
-const templates = {
-  ts: [
-    {
-      path: 'src/index.ts',
-      tpl: 'src/template/src/index.ts',
-    },
-    {
-      path: 'tsconfig.json',
-      tpl: 'src/template/tsconfig.json',
-    },
-    {
-      path: 'tslint.json',
-      tpl: 'src/template/tslint.json',
-    },
-  ],
-  js: [
-    {
-      path: 'src/index.js',
-      tpl: 'src/template/src/index.js',
-    },
-    {
-      path: '.babelrc',
-      tpl: 'src/template/.babelrc',
-    },
-    {
-      path: '.eslintrc',
-      tpl: 'src/template/.eslintrc',
-    },
-  ],
-};
-
-const packages = {
+const langConfigs = {
   ts: {
-    dependencies: [],
-    devDependencies: ['ts-lint', 'ts-loader', 'typescript'],
+    packages: {
+      dependencies: [],
+      devDependencies: ['ts-lint', 'ts-loader', 'typescript'],
+    },
+    templates: [
+      {
+        path: 'src/index.ts',
+        tpl: 'src/template/src/index.ts',
+      },
+      {
+        path: 'tsconfig.json',
+        tpl: 'src/template/tsconfig.json',
+      },
+      {
+        path: 'tslint.json',
+        tpl: 'src/template/tslint.json',
+      },
+    ],
   },
   js: {
-    dependencies: [],
-    devDependencies: [
-      'babel-eslint',
-      'babel-loader',
-      '@babel/core',
-      '@babel/preset-env',
-      'eslint',
+    packages: {
+      dependencies: [],
+      devDependencies: [
+        'babel-eslint',
+        'babel-loader',
+        '@babel/core',
+        '@babel/preset-env',
+        'eslint',
+      ],
+    },
+    templates: [
+      {
+        path: 'src/index.js',
+        tpl: 'src/template/src/index.js',
+      },
+      {
+        path: '.babelrc',
+        tpl: 'src/template/.babelrc',
+      },
+      {
+        path: '.eslintrc',
+        tpl: 'src/template/.eslintrc',
+      },
     ],
   },
 };
@@ -66,13 +67,7 @@ function getConfigByLanguage(lang) {
       break;
   }
 
-  return {
-    templates: templates[lang] || [],
-    packages: packages[lang] || {
-      dependencies: [],
-      devDependencies: [],
-    },
-  };
+  return langConfigs[lang];
 }
 
 module.exports = { getConfigByLanguage };

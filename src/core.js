@@ -67,6 +67,10 @@ async function prompts() {
 function applyLanguageConfig(lang) {
   const langConfig = getConfigByLanguage(lang);
 
+  if (!langConfig) {
+    return console.warn('No config for:', lang);
+  }
+
   pluginHelper.addPackages(
     langConfig.packages.dependencies,
     langConfig.packages.devDependencies,
