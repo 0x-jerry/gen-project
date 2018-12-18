@@ -1,5 +1,6 @@
 const execSync = require('child_process').execSync;
-const { fs } = require('fantasy-utility');
+const utils = require('fantasy-utility');
+const fs = require('fs');
 
 function exec(command) {
   return execSync(command, { encoding: 'utf-8' })
@@ -19,7 +20,16 @@ function gitConfig() {
   return config;
 }
 
+function isEmptyDir(path) {
+  let files = [];
+  if (fs.existsSync(path)) {
+    files = fs.readdirSync(path);
+  }
+  return files.length === 0;
+}
+
 module.exports = {
+  isEmptyDir,
   gitConfig,
-  fs,
+  ufs: utils.fs,
 };

@@ -1,20 +1,19 @@
 const path = require('path');
-
 const _name = path.basename(__dirname);
 
-const _config = {
-  templates: [
-    {
-      path: '.editorconfig',
-      tpl: path.join(__dirname, 'template/.editorconfig')
-    }
-  ]
-};
-
+/**
+ *
+ * @param {Helper} helper
+ */
 function install(helper) {
-  helper.addPlugin(_name, _config);
+  helper.addPlugin(_name, {});
+
+  helper.addTemplate(
+    '.editorconfig',
+    path.join(__dirname, 'template/.editorconfig'),
+  );
 }
 
 module.exports = {
-  install
+  install,
 };

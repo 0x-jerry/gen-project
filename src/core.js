@@ -4,7 +4,6 @@ const inquirer = require('inquirer');
 const config = require('./config');
 const Mustache = require('mustache');
 const utils = require('./utils');
-const shell = require('shelljs');
 const { getConfigByLanguage } = require('./languageConfig');
 
 config.author = utils.gitConfig();
@@ -12,16 +11,7 @@ config.project = path.parse(process.cwd()).name;
 
 const pluginPath = path.join(__dirname, '..', 'plugin');
 
-const pluginHelper = {
-  config,
-  addPlugin(name, options) {
-    if (config.plugins[name]) {
-      return console.warn('duplicate plugin', name);
-    }
-
-    config.plugins[name] = options;
-  },
-};
+const pluginHelper = require('./pluginHelper');
 
 function render(filePath) {
   const p = path.isAbsolute(filePath)
@@ -77,15 +67,12 @@ async function prompts() {
 function applyLanguageConfig(lang) {
   const langConfig = getConfigByLanguage(lang);
 
-  config.packages.dependencies = config.packages.dependencies.concat(
+  pluginHelper.addPackages(
     langConfig.packages.dependencies,
-  );
-
-  config.packages.devDependencies = config.packages.devDependencies.concat(
     langConfig.packages.devDependencies,
   );
 
-  return langConfig.templates;
+  pluginHelper.addTemplates(langConfig.templates);
 }
 
 async function genProject(projectPath) {
@@ -93,53 +80,22 @@ async function genProject(projectPath) {
     return console.warn('incorrect path:', projectPath);
   }
 
-  // choose plugins
   const answer = await prompts();
-
-  // core template
-  let templates = []
-    .concat(config.templates)
-    .concat(applyLanguageConfig(answer.useTs ? 'ts' : 'js'));
+  applyLanguageConfig(answer.useTs ? 'ts' : 'js');
 
   const plugins = answer.plugins || [];
+
   await installPlugins(plugins);
 
-  // plugin template
-  plugins.forEach(key => {
-    const tpls = config.plugins[key].templates;
-    if (tpls && Array.isArray(tpls)) {
-      templates = templates.concat(tpls);
-    }
-  });
+  const templates = config.templates;
 
   for (let i = 0, max = templates.length; i < max; i++) {
     const tpl = templates[i].tpl;
     const p = templates[i].path;
     const content = await render(tpl);
     //save file
-    await utils.fs.saveFile(path.join(projectPath, p), content);
+    await utils.ufs.saveFile(path.join(projectPath, p), content);
   }
 }
-
-async function test() {
-  const tempPath = path.join(__dirname, '../temp');
-  shell.exec(`rm -rf ${tempPath}`);
-
-  await genProject(tempPath);
-
-  // const packages = config.packages.dependencies;
-  // if (packages.length) {
-  //   shell.exec(`cd ${tempPath} && yarn add ${packages.join(' ')}`);
-  // }
-
-  // const devPackages = config.packages.devDependencies;
-  // if (devPackages.length) {
-  //   shell.exec(`cd ${tempPath} && yarn add ${devPackages.join(' ')} -D`);
-  // }
-
-  console.log(JSON.stringify(config, null, 2));
-}
-
-// test();
 
 module.exports = genProject;
