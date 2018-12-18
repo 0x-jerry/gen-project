@@ -1,3 +1,6 @@
+/**
+ * @type {IConfig}
+ */
 const config = {
   project: '',
   author: {
