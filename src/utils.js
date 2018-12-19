@@ -1,6 +1,7 @@
 const execSync = require('child_process').execSync;
 const utils = require('fantasy-utility');
 const fs = require('fs');
+const chalk = require('chalk');
 
 /**
  *
@@ -31,7 +32,7 @@ function gitConfig() {
         .trim(/\s/),
     };
   } catch (error) {
-    console.error('Get git config error:', error);
+    console.error(chalk`{red Get git config error:}`, error);
   }
 
   return config;

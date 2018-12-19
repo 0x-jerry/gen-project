@@ -35,7 +35,7 @@ function formatPresets(presets) {
       if (preset.library) keys.push('library');
       keys = keys.concat(Object.keys(preset.plugins));
 
-      options.push(`[${key}] (${keys.join(' ')})`);
+      options.push(`${key} - (${keys.join(' ')})`);
     }
   }
 
@@ -57,7 +57,9 @@ async function getPreset() {
     },
   ]);
 
-  return presets[answer.preset] || extraPresets[answer.preset] || null;
+  const preset = answer.preset.match(/\w+/)[0] || '';
+
+  return presets[preset] || extraPresets[preset] || null;
 }
 
 /**

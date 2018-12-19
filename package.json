@@ -6,8 +6,8 @@
   "author": "cwxyz007 <jie844067636@gmail.com>",
   "types": "types/index.d.ts",
   "scripts": {
-    "dev": "node ./bin.js temp --skip-install-package",
-    "test": "node ./bin.js"
+    "dev": "node ./bin.js create temp -s",
+    "test": "node ./bin.js create"
   },
   "dependencies": {
     "chalk": "^2.4.1",
