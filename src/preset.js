@@ -3,6 +3,7 @@ const os = require('os');
 const path = require('path');
 const fs = require('fs');
 const utils = require('fantasy-utility');
+const chalk = require('chalk');
 
 /**
  * @type {{[name:string]: IConfig}}
@@ -20,6 +21,27 @@ if (fs.existsSync(rcPath)) {
   extraPresets = JSON.parse(data);
 }
 
+function formatPresets(presets) {
+  const options = [];
+
+  for (const key in presets) {
+    if (presets.hasOwnProperty(key)) {
+      const preset = presets[key];
+      let keys = [];
+      if (preset.browser) keys.push('webpack');
+      if (preset.ts) keys.push('ts');
+      if (preset.js) keys.push('js');
+      if (preset.node) keys.push('node');
+      if (preset.library) keys.push('library');
+      keys = keys.concat(Object.keys(preset.plugins));
+
+      options.push(`[${key}] (${keys.join(' ')})`);
+    }
+  }
+
+  return options;
+}
+
 async function getPreset() {
   /**
    * @type {{preset: string}}
@@ -29,8 +51,8 @@ async function getPreset() {
       name: 'preset',
       type: 'list',
       message: 'Choose a preset',
-      choices: Object.keys(presets)
-        .concat(Object.keys(extraPresets))
+      choices: formatPresets(presets)
+        .concat(formatPresets(extraPresets))
         .concat('custom'),
     },
   ]);
@@ -43,14 +65,19 @@ async function getPreset() {
  * @param {IConfig} config
  */
 function savePreset(name, config) {
-  extraPresets = extraPresets || {};
+  if (name in presets || name in extraPresets) {
+    return console.log(
+      chalk`{red save failed! [${name}] has exists in preset!}`,
+    );
+  }
+
   extraPresets[name] = config;
   utils.fs
     .saveFile(rcPath, JSON.stringify(extraPresets, null, 2))
     .then(() => {
-      console.log('saved');
+      console.log(chalk`{green preset [${name}] save successful}`);
     })
-    .catch(e => config.log('save error', e));
+    .catch(e => config.log(chalk`{red preset [${name}] save failed}`, e));
 }
 
 module.exports = {
