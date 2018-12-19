@@ -18,5 +18,6 @@ JS/TS 项目模板生成工具 (JavaScript/TypeScript project template generator
 - [x] [plugin] license
 - [ ] [plugin] css-preprocessor
   - [ ] less
-- [ ] [plugin] travis-ci
-- [ ] [plugin] coveralls
+- [ ] [plugin] test
+  - [ ] mocha
+  - [ ] chai
