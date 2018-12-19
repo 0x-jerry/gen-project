@@ -17,7 +17,6 @@ const rcPath = path.join(os.homedir(), '.projrc');
 
 if (fs.existsSync(rcPath)) {
   const data = utils.fs.readFile.sync(rcPath) || '{}';
-  console.log(data);
   extraPresets = JSON.parse(data);
 }
 

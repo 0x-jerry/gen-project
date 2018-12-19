@@ -33,6 +33,31 @@ function checkOptions(argv) {
   });
 }
 
+async function saveConfig() {
+  /**
+   * @type {{presetName:string}}
+   */
+  const answer = await inquirer.prompt([
+    {
+      name: 'save',
+      message: 'Save to a preset?',
+      type: 'confirm',
+      default: false
+    },
+    {
+      name: 'presetName',
+      message: 'Input preset name',
+      when(answer) {
+        return answer.save;
+      },
+    },
+  ]);
+
+  if (answer.presetName) {
+    savePreset(answer.presetName, config);
+  }
+}
+
 async function start() {
   if (!binConfig.folder) {
     const answer = await inquirer.prompt([
@@ -52,26 +77,8 @@ async function start() {
 
   await genProject(projectPath, preset);
 
-  /**
-   * @type {{presetName:string}}
-   */
-  const answer = await inquirer.prompt([
-    {
-      name: 'save',
-      message: 'Save to a preset?',
-      type: 'confirm',
-    },
-    {
-      name: 'presetName',
-      message: 'Input preset name',
-      when(answer) {
-        return answer.save;
-      },
-    },
-  ]);
-
-  if (answer.presetName) {
-    savePreset(answer.presetName, config);
+  if (!preset) {
+    await saveConfig();
   }
 
   if (!binConfig.skipInstallPkg) {
