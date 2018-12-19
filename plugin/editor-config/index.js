@@ -10,7 +10,7 @@ function install(helper) {
 
   helper.addTemplate(
     '.editorconfig',
-    path.join(__dirname, 'template/.editorconfig'),
+    'plugin/editor-config/template/.editorconfig',
   );
 }
 

@@ -3,6 +3,7 @@ const utils = require('./src/utils');
 const inquirer = require('inquirer');
 const config = require('./src/config');
 const path = require('path');
+const { getPreset, savePreset } = require('./src/preset');
 
 const argv = process.argv.slice(2);
 
@@ -47,8 +48,31 @@ async function start() {
   config.project = binConfig.folder;
 
   const projectPath = path.join(__dirname, config.project);
+  const preset = await getPreset();
 
-  await genProject(projectPath);
+  await genProject(projectPath, preset);
+
+  /**
+   * @type {{presetName:string}}
+   */
+  const answer = await inquirer.prompt([
+    {
+      name: 'save',
+      message: 'Save to a preset?',
+      type: 'confirm',
+    },
+    {
+      name: 'presetName',
+      message: 'Input preset name',
+      when(answer) {
+        return answer.save;
+      },
+    },
+  ]);
+
+  if (answer.presetName) {
+    savePreset(answer.presetName, config);
+  }
 
   if (!binConfig.skipInstallPkg) {
     const packages = config.packages.dependencies;

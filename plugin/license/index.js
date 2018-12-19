@@ -18,7 +18,7 @@ function applyOptions(helper, { type, name }) {
   _config.type = type;
   _config.author = name;
 
-  helper.addTemplate('LICENSE', path.join(__dirname, 'template', type));
+  helper.addTemplate('LICENSE', `plugin/license/template/${type}`);
   helper.addPlugin(_name, _config);
 
   return _config;

@@ -79,19 +79,24 @@ function applyLanguageConfig(lang) {
   pluginHelper.addTemplates(langConfig.templates);
 }
 
-async function genProject(projectPath) {
+/**
+ *
+ * @param {string} projectPath
+ * @param {IConfig} [presetConfig]
+ */
+async function genProject(projectPath, presetConfig) {
   if (!projectPath) {
     return console.warn('incorrect path:', projectPath);
   }
 
-  const answer = await prompts();
-  applyLanguageConfig(answer.useTs ? 'ts' : 'js');
+  if (!presetConfig) {
+    const answer = await prompts();
+    applyLanguageConfig(answer.useTs ? 'ts' : 'js');
+    const plugins = answer.plugins || [];
+    await installPlugins(plugins);
+  }
 
-  const plugins = answer.plugins || [];
-
-  await installPlugins(plugins);
-
-  const templates = config.templates;
+  const templates = presetConfig ? presetConfig.templates : config.templates;
 
   for (let i = 0, max = templates.length; i < max; i++) {
     const tpl = templates[i].tpl;

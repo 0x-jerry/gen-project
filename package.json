@@ -4,12 +4,13 @@
   "bin": "bin.js",
   "license": "MIT",
   "author": "cwxyz007 <jie844067636@gmail.com>",
+  "types": "types/index.d.ts",
   "scripts": {
     "dev": "node ./bin.js temp --skip-install-package",
     "test": "node ./bin.js"
   },
   "dependencies": {
-    "fantasy-utility": "^0.1.0",
+    "fantasy-utility": "^0.1.2",
     "inquirer": "^6.2.0",
     "mustache": "^3.0.1"
   },
