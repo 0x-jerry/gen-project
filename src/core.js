@@ -86,6 +86,22 @@ function applyLanguageConfig(lang) {
 
 /**
  *
+ * @param {IConfig} conf
+ * @returns {IConfig}
+ */
+function mergeWithConfig(conf) {
+  if (!conf) {
+    return config;
+  }
+
+  conf.project = config.project;
+  conf.author = config.author;
+
+  return conf;
+}
+
+/**
+ *
  * @param {string} projectPath
  * @param {IConfig} [presetConfig]
  */
@@ -101,12 +117,14 @@ async function genProject(projectPath, presetConfig) {
     await installPlugins(plugins);
   }
 
-  const templates = presetConfig ? presetConfig.templates : config.templates;
+  const currConfig = mergeWithConfig(presetConfig);
+
+  const templates = currConfig.templates;
 
   for (let i = 0, max = templates.length; i < max; i++) {
     const tpl = templates[i].tpl;
     const p = templates[i].path;
-    const content = await render(tpl, presetConfig || config);
+    const content = await render(tpl, currConfig);
     //save file
     await utils.ufs.saveFile(path.join(projectPath, p), content);
   }
