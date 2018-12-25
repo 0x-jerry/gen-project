@@ -82,7 +82,7 @@ async function start(folder) {
   }
 
   if (program.skipInstallPkg) {
-    console.log(JSON.stringify(config, null, 2));
+    console.log(JSON.stringify(preset || config, null, 2));
   } else {
     installPkg(projectPath);
   }

@@ -13,7 +13,12 @@ const pluginPath = path.join(__dirname, '..', 'plugin');
 
 const pluginHelper = require('./pluginHelper');
 
-function render(filePath) {
+/**
+ *
+ * @param {string} filePath
+ * @param {IConfig} configs
+ */
+function render(filePath, configs) {
   const p = path.isAbsolute(filePath)
     ? filePath
     : path.join(__dirname, '..', filePath);
@@ -23,7 +28,7 @@ function render(filePath) {
       if (err) return reject(err);
 
       const hasMustache = /{{.+}}/.test(data);
-      const content = hasMustache ? Mustache.render(data, config) : data;
+      const content = hasMustache ? Mustache.render(data, configs) : data;
       resolve(content);
     });
   });
@@ -101,7 +106,7 @@ async function genProject(projectPath, presetConfig) {
   for (let i = 0, max = templates.length; i < max; i++) {
     const tpl = templates[i].tpl;
     const p = templates[i].path;
-    const content = await render(tpl);
+    const content = await render(tpl, presetConfig || config);
     //save file
     await utils.ufs.saveFile(path.join(projectPath, p), content);
   }
